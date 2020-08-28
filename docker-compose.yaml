@@ -1,0 +1,32 @@
+version: '3.4'
+services:
+  api:
+    build:
+      context: .
+      target: symfony_dev_php
+    ports:
+      - "80:80"
+    env_file: .env
+    volumes:
+      - logs:/var/log
+      - ./:/srv/app
+    links:
+      - database
+  database:
+    image: postgres:13-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    command:
+      - "postgres"
+      - "-c"
+      - "listen_addresses=*"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: chez_nestor
+      POSTGRES_USER: chez_nestor
+      POSTGRES_PASSWORD: grez6gezHEZF54hz4rt6hrFEGEgdfs
+volumes:
+  logs: {}
+  postgres: {}

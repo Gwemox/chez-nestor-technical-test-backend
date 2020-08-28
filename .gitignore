@@ -54,6 +54,7 @@
 #IDE
 .DS_Store
 .idea
+.env.local
 ###> symfony/phpunit-bridge ###
 .phpunit
 .phpunit.result.cache
