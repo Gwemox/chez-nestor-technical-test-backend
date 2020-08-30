@@ -11,8 +11,9 @@ services:
     links:
       - database
     environment:
-      - APP_ENV=prod
-      - APP_SECRET=3f2a40e36bfe197ba15f3743e778b0cb
+      APP_ENV: prod
+      APP_SECRET: 3f2a40e36bfe197ba15f3743e778b0cb
+      WAIT_HOSTS: database:5432
   database:
     image: postgres:13-alpine
     restart: always
