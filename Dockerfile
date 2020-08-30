@@ -44,8 +44,8 @@ COPY --from=symfony_build_dev /usr/bin/composer /usr/bin/composer
 COPY --from=symfony_build_dev /srv/app/vendor vendor
 COPY --from=symfony_build_dev /srv/app/var var
 COPY --from=symfony_build_dev /srv/app/bin bin
-RUN php bin/phpunit --check-version
 COPY . .
+RUN php bin/phpunit --check-version
 ENTRYPOINT /wait && php bin/console doctrine:database:drop --force && php bin/console doctrine:database:create && php bin/console doctrine:migration:migrate --no-interaction && php bin/phpunit
 #CMD php /srv/app/bin/console doctrine:migration:migrate --no-interaction && php bin/phpunit
 
