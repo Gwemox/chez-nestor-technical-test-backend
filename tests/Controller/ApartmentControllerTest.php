@@ -8,6 +8,7 @@ use App\Service\CrudService\CrudServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ApartmentControllerTest extends WebTestCase
 {
@@ -31,34 +32,78 @@ class ApartmentControllerTest extends WebTestCase
         $this->assertEquals($data['name'], $result['name']);
         $this->assertEquals($data['street'], $result['street']);
         $this->assertEquals($data['zipCode'], $result['zipCode']);
+
+        return $result['id'];
     }
 
+    /**
+     * @depends testPostJSON
+     */
     public function testGetAll()
     {
         $client = static::createClient();
 
         $client->request('GET', '/apartments/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        /*$this->assertEquals(200, $client->getResponse()->getStatusCode());
-
-        $crudService = $this->createMock(CrudServiceInterface::class);
-        $crudService->expects($this->once())->method('getAll')->with($this->equalTo(Apartment::class));
-        $controller = new ApartmentController($crudService);
-        $controller->getAll();*/
+        $response = $client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
+        $responseData = json_decode($response->getContent(), true);
+        $this->assertCount(1, $responseData);
     }
 
-   /* public function testEdit()
+    /**
+     * @depends testPostJSON
+     * @param string $id
+     */
+    public function testGetOneById(string $id)
     {
+        $client = static::createClient();
+        $this->assertNotNull($id);
+        $client->request('GET', sprintf('/apartments/%s', $id));
+        $response = $client->getResponse();
 
+        $this->assertEquals(200, $response->getStatusCode());
+        $responseData = json_decode($response->getContent(), true);
+        $this->assertEquals([
+            'id' => $id,
+            'city' => 'Lyon',
+            'name' => 'Chez Thibault',
+            'street' => '12 rue nestor',
+            'zipCode' => '69007'
+        ], $responseData);
     }
 
-    public function testPost()
+    /**
+     * @depends testPostJSON
+     * @param string $id
+     */
+    public function testEdit(string $id)
     {
+        $client = static::createClient();
+        $this->assertNotNull($id);
+        $server = array('CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json');
+        $data = [
+            'name' => 'Chez Mamie',
+            'street' => '12 rue du castor',
+        ];
 
+        $client->request('PATCH', sprintf('/apartments/%s', $id), [], [], $server, json_encode($data));
+        $response = $client->getResponse();
+
+        $this->assertEquals(204, $response->getStatusCode());
     }
 
-    public function testGetOneById()
+    /**
+     * @depends testPostJSON
+     * @param string $id
+     */
+    public function testDelete(string $id)
     {
+        $client = static::createClient();
+        $this->assertNotNull($id);
 
-    } */
+        $client->request('DELETE', sprintf('/apartments/%s', $id));
+        $response = $client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
 }
