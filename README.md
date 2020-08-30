@@ -28,6 +28,7 @@ Lancement en local sur sa machine (BDD + PHP + API) :
 `docker-compose -f docker-compose.yaml up --build`
 
 L'application est ensuite disponible sur le port 80 de votre machine : http://localhost/
+
 ---
 Cette méthode n'est pas recommandée.
 Lancement dans le but de développer de BDD + PHP + API : 
@@ -35,6 +36,7 @@ Lancement dans le but de développer de BDD + PHP + API :
 `docker-compose -f docker-compose.dev.yaml up --build`
 
 L'application est ensuite disponible sur le port 80 de votre machine : http://localhost/
+
 ---
 
 ## API Endpoints ?
