@@ -1,11 +1,11 @@
 #Test API Backend - Chez Nestor
 
-##A propos
+## A-propos
 
 Application écrite en PHP sous le framework Symphony 5.1.* avec une base de données en PostgreSQL.
 L'application est dockerisé pour rendre le test plus facile !
 
-Ennoncé : https://github.com/chez-nestor/technical-test-backend
+Énoncé : https://github.com/chez-nestor/technical-test-backend
 
 Toutes les règles sont respectées :
 - Un appartement contient au moins 1 chambre.
@@ -14,12 +14,12 @@ Toutes les règles sont respectées :
 - Lorsqu'une chambre a été réservée par un client, elle ne peut plus être réservée.
 - Une chambre peut être réservée seulement si le client a rempli toutes ses informations.
 
-##Comment la lancer ?
+## Comment la lancer ?
 
 Sur une machine disposant de Docker, Docker-Compose et une connexion interne :
 
 Lancement des tests unitaires / intégrations :
-`docker`
+`docker-compose -f docker-compose.test.yaml up --abort-on-container-exit --build`
 ---
 Lancement en local sur sa machine (BDD + PHP + API) : `docker-compose -f docker-compose.yaml up --build`
 L'application est ensuite disponible sur le port 80 de votre machine : http://localhost/
@@ -29,12 +29,12 @@ Lancement dans le but de développer de BDD + PHP + API : `docker-compose -f doc
 L'application est ensuite disponible sur le port 80 de votre machine : http://localhost/
 ---
 
-##API Endpoints ?
+## API Endpoints ?
 
-####Appartements
-#####Créer un appartement
+#### Appartements
+##### Créer un appartement
 URL : `POST /apartments` : 
-#####Exemple
+##### Exemple
 Body :
 `{
       "name": "Chez Toto",
@@ -56,9 +56,9 @@ Status code :
 - 201 : création réussite
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
-#####Lister tous les appartements
+##### Lister tous les appartements
 URL : `GET /apartments` : 
-#####Exemple
+##### Exemple
 Resultat :
 `[
 {
@@ -74,9 +74,9 @@ Status code :
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
 
-#####Récupérer un appartement
+##### Récupérer un appartement
 URL : `GET /apartments/{apartmentId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `{
      "id": "c66bd9b0-d3ac-4f42-8473-691cbef397c1",
@@ -93,9 +93,9 @@ Status code :
 
 ---
 
-#####Modifier un appartement
+##### Modifier un appartement
 URL : `PATCH /apartments/{apartmentId}` : 
-#####Exemple
+##### Exemple
 Body :
 `{
      "id": "39844656-e57f-4c1c-8284-93ee643b34b7",
@@ -111,9 +111,9 @@ Status code :
 - 5xx : erreur serveur
 
 ---
-#####Supprimer un appartement
+##### Supprimer un appartement
 URL : `DELETE /apartments/{apartmentId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `{
     "id": "26413985-d5684f-7c2d-1153-36bb546f21e3",
@@ -131,10 +131,10 @@ Status code :
 
 ---
 
-####Chambres
-#####Créer une chambre
+#### Chambres
+##### Créer une chambre
 URL : `POST /rooms` : 
-#####Exemple
+##### Exemple
 Body :
 `{
      "number": 41,
@@ -168,9 +168,9 @@ Status code :
 - 201 : création réussite
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
-#####Lister tous les chambres
+##### Lister tous les chambres
 URL : `GET /rooms` : 
-#####Exemple
+##### Exemple
 Resultat :
 `[
      {
@@ -194,9 +194,9 @@ Status code :
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
 
-#####Lister tous les chambres d'un appartement
+##### Lister tous les chambres d'un appartement
 URL : `GET /rooms/apartment/{apartmentId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `[
      {
@@ -220,9 +220,9 @@ Status code :
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
 
-#####Récupérer une chambre
+##### Récupérer une chambre
 URL : `GET /rooms/{roomId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `{
     "id": "4e814948-2a83-4c1c-9a04-22c08ac73385",
@@ -246,9 +246,9 @@ Status code :
 
 ---
 
-#####Modifier une chambre
+##### Modifier une chambre
 URL : `PATCH /rooms/{roomId}` : 
-#####Exemple
+##### Exemple
 Body :
 `{
      "id": "4e814948-2a83-4c1c-9a04-22c08ac73385",
@@ -264,9 +264,9 @@ Status code :
 - 5xx : erreur serveur
 
 ---
-#####Supprimer une chambre
+##### Supprimer une chambre
 URL : `DELETE /rooms/{roomId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `{
     "id": "4e814948-2a83-4c1c-9a04-22c08ac73385",
@@ -290,10 +290,10 @@ Status code :
 
 ---
 
-####Clients
-#####Créer un client
+#### Clients
+##### Créer un client
 URL : `POST /clients` : 
-#####Exemple
+##### Exemple
 Body :
 `{
      "first_name": "John",
@@ -319,9 +319,9 @@ Status code :
 - 201 : création réussite
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
-#####Lister tous les clients
+##### Lister tous les clients
 URL : `GET /clients` : 
-#####Exemple
+##### Exemple
 Resultat :
 `[
      {
@@ -340,9 +340,9 @@ Status code :
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
 
-#####Récupérer un client
+##### Récupérer un client
 URL : `GET /clients/{clientId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `{
     "id": "2f3b0d82-e16a-46c6-8475-682daa71c7e2",
@@ -361,9 +361,9 @@ Status code :
 
 ---
 
-#####Modifier un client
+##### Modifier un client
 URL : `PATCH /clients/{clientId}` : 
-#####Exemple
+##### Exemple
 Body :
 `{
     "id": "2f3b0d82-e16a-46c6-8475-682daa71c7e2",
@@ -379,9 +379,9 @@ Status code :
 - 5xx : erreur serveur
 
 ---
-#####Supprimer un client
+##### Supprimer un client
 URL : `DELETE /clients/{clientId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `{
     "id": "2f3b0d82-e16a-46c6-8475-682daa71c7e2",
@@ -400,10 +400,10 @@ Status code :
 
 ---
 
-####Réservations
-#####Créer une réservation
+#### Réservations
+##### Créer une réservation
 URL : `POST /bookings` : 
-#####Exemple
+##### Exemple
 Body :
 `{
      "begin_at": "2020-09-14T00:00:00+00:00",
@@ -430,9 +430,9 @@ Status code :
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
 
-#####Lister toutes les réservations
+##### Lister toutes les réservations
 URL : `GET /bookings` : 
-#####Exemple
+##### Exemple
 Resultat :
 `[
 {
@@ -453,9 +453,9 @@ Status code :
 - 4xx : erreur de requête (client)
 - 5xx : erreur serveur
 
-#####Récupérer une réservation
+##### Récupérer une réservation
 URL : `GET /bookings/{bookingId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `{
      "id": "e16c69eb-c6ff-440d-9a02-ce67bb5b38be",
@@ -476,9 +476,9 @@ Status code :
 
 ---
 
-#####Modifier une réservation
+##### Modifier une réservation
 URL : `PATCH /bookings/{bookingId}` : 
-#####Exemple
+##### Exemple
 Body :
 `{
      "id": "e16c69eb-c6ff-440d-9a02-ce67bb5b38be",
@@ -495,9 +495,9 @@ Status code :
 - 5xx : erreur serveur
 
 ---
-#####Supprimer une réservation
+##### Supprimer une réservation
 URL : `DELETE /bookings/{bookingId}` : 
-#####Exemple
+##### Exemple
 Resultat :
 `{
      "id": "e16c69eb-c6ff-440d-9a02-ce67bb5b38be",
