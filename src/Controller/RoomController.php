@@ -8,10 +8,9 @@ use App\Repository\RoomRepository;
 use App\Service\CrudService\CrudServiceInterface;
 use App\Service\CrudService\Exception\BadTypeException;
 use App\Service\CrudService\Exception\FormNotValidException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * Class RoomController
@@ -27,10 +26,13 @@ class RoomController extends AbstractController
     /** @var RoomRepository */
     private $roomRepository;
 
-    public function __construct(CrudServiceInterface $crudService, RoomRepository $roomRepository)
+    public function __construct(CrudServiceInterface $crudService,
+                                RoomRepository $roomRepository,
+                                SerializerInterface $serializer)
     {
         $this->crudService = $crudService;
         $this->roomRepository = $roomRepository;
+        parent::__construct($serializer);
     }
 
     /**
@@ -39,7 +41,7 @@ class RoomController extends AbstractController
      */
     public function getAll(): JsonResponse
     {
-        return $this->json($this->crudService->getAll(self::ENTITY), 200, [], [AbstractNormalizer::CIRCULAR_REFERENCE_LIMIT => 2]);
+        return $this->json($this->crudService->getAll(self::ENTITY), 200, []);
     }
 
     /**
@@ -49,7 +51,7 @@ class RoomController extends AbstractController
      */
     public function getAllByApartment(string $apartmentId): JsonResponse
     {
-        return $this->json($this->roomRepository->findByApartment($apartmentId), 200, [], [AbstractNormalizer::CIRCULAR_REFERENCE_LIMIT => 2]);
+        return $this->json($this->roomRepository->findByApartment($apartmentId), 200, []);
     }
 
     /**

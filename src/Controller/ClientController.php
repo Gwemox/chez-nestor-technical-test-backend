@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Apartment;
-use App\Form\ApartmentCreateEditType;
+use App\Entity\Client;
+use App\Form\ClientCreateEditType;
 use App\Service\CrudService\CrudServiceInterface;
 use App\Service\CrudService\Exception\BadTypeException;
 use App\Service\CrudService\Exception\FormNotValidException;
@@ -12,15 +12,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ApartmentController
- * @Route("/apartments", name="apartments_")
+ * Class ClientController
+ * @Route("/clients", name="clients_")
  * @package App\Controller
  */
-class ApartmentController extends AbstractController
+class ClientController extends AbstractController
 {
     /** @var CrudServiceInterface */
     private $crudService;
-    private const ENTITY = Apartment::class;
+    private const ENTITY = Client::class;
 
     public function __construct(CrudServiceInterface $crudService, SerializerInterface $serializer)
     {
@@ -34,22 +34,22 @@ class ApartmentController extends AbstractController
      */
     public function getAll(): JsonResponse
     {
-        return $this->json($this->crudService->getAll(self::ENTITY));
+        return $this->json($this->crudService->getAll(self::ENTITY), 200, []);
     }
 
     /**
-     * @Route("/{apartmentId}",
+     * @Route("/{clientId}",
      *     name="find_one",
      *     methods="GET",
-     *     requirements={"apartmentId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
+     *     requirements={"clientId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
      * )
-     * @param String $apartmentId
+     * @param String $clientId
      * @return JsonResponse
      * @throws BadTypeException
      */
-    public function getOneById(string $apartmentId)
+    public function getOneById(string $clientId)
     {
-        return $this->json($this->crudService->getOneById(self::ENTITY, $apartmentId));
+        return $this->json($this->crudService->getOneById(self::ENTITY, $clientId));
     }
 
     /**
@@ -60,45 +60,45 @@ class ApartmentController extends AbstractController
     public function post()
     {
         return $this->json(
-            $this->crudService->post(self::ENTITY,ApartmentCreateEditType::class),
+            $this->crudService->post(self::ENTITY,ClientCreateEditType::class),
             201
         );
     }
 
     /**
-     * @Route("/{apartmentId}",
+     * @Route("/{clientId}",
      *     name="edit",
      *     methods="PATCH",
-     *     requirements={"apartmentId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
+     *     requirements={"clientId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
      * )
-     * @param string $apartmentId
+     * @param string $clientId
      * @return JsonResponse
      * @throws BadTypeException
      * @throws FormNotValidException
      */
-    public function edit(string $apartmentId)
+    public function edit(string $clientId)
     {
         return $this->json(
-            $this->crudService->edit(self::ENTITY, ApartmentCreateEditType::class, $apartmentId),
+            $this->crudService->edit(self::ENTITY, ClientCreateEditType::class, $clientId),
             204
         );
     }
 
     /**
-     * @Route("/{apartmentId}",
+     * @Route("/{clientId}",
      *     name="delete",
      *     methods="DELETE",
-     *     requirements={"apartmentId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
+     *     requirements={"clientId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
      * )
-     * @param string $apartmentId
+     * @param string $clientId
      * @return JsonResponse
      * @throws BadTypeException
      * @throws FormNotValidException
      */
-    public function delete(string $apartmentId)
+    public function delete(string $clientId)
     {
         return $this->json(
-            $this->crudService->delete(self::ENTITY, $apartmentId)
+            $this->crudService->delete(self::ENTITY, $clientId)
         );
     }
 }
