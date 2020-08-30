@@ -19,6 +19,10 @@ class RoomRepository extends ServiceEntityRepository
         parent::__construct($registry, Room::class);
     }
 
+    public function findByApartment(string $apartmentId) {
+        return $this->findBy(['apartment' => $apartmentId]);
+    }
+
     // /**
     //  * @return Room[] Returns an array of Room objects
     //  */

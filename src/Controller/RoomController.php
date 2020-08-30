@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Room;
 use App\Form\RoomCreateEditType;
+use App\Repository\RoomRepository;
 use App\Service\CrudService\CrudServiceInterface;
 use App\Service\CrudService\Exception\BadTypeException;
 use App\Service\CrudService\Exception\FormNotValidException;
@@ -23,9 +24,13 @@ class RoomController extends AbstractController
     private $crudService;
     private const ENTITY = Room::class;
 
-    public function __construct(CrudServiceInterface $crudService)
+    /** @var RoomRepository */
+    private $roomRepository;
+
+    public function __construct(CrudServiceInterface $crudService, RoomRepository $roomRepository)
     {
         $this->crudService = $crudService;
+        $this->roomRepository = $roomRepository;
     }
 
     /**
@@ -35,6 +40,16 @@ class RoomController extends AbstractController
     public function getAll(): JsonResponse
     {
         return $this->json($this->crudService->getAll(self::ENTITY), 200, [], [AbstractNormalizer::CIRCULAR_REFERENCE_LIMIT => 2]);
+    }
+
+    /**
+     * @Route("/apartment/{apartmentId}", name="list_all_by_apart", methods="GET")
+     * @param string $apartmentId
+     * @return JsonResponse
+     */
+    public function getAllByApartment(string $apartmentId): JsonResponse
+    {
+        return $this->json($this->roomRepository->findByApartment($apartmentId), 200, [], [AbstractNormalizer::CIRCULAR_REFERENCE_LIMIT => 2]);
     }
 
     /**
