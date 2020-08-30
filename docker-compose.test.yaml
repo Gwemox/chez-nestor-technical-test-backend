@@ -1,0 +1,19 @@
+version: '3.4'
+services:
+  api_test:
+    build:
+      context: .
+      target: api_test
+    links:
+      - database_test
+    environment:
+      - DATABASE_URL=postgres://chez_nestor_test:grez6gezHEZF54hz4rt6hrFEGEgdfs@database_test:5432/chez_nestor_test
+  database_test:
+    image: postgres:13-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: chez_nestor_test
+      POSTGRES_USER: chez_nestor_test
+      POSTGRES_PASSWORD: grez6gezHEZF54hz4rt6hrFEGEgdfs

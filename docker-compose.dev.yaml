@@ -3,21 +3,24 @@ services:
   api:
     build:
       context: .
-      target: api
+      target: symfony_dev_php
     ports:
       - "80:80"
+    env_file: .env.local
     volumes:
       - logs:/var/log
+      - ./:/srv/app
     links:
       - database
-    environment:
-      - APP_ENV=prod
-      - APP_SECRET=3f2a40e36bfe197ba15f3743e778b0cb
   database:
     image: postgres:13-alpine
     restart: always
     ports:
       - "5432:5432"
+    command:
+      - "postgres"
+      - "-c"
+      - "listen_addresses=*"
     volumes:
       - postgres:/var/lib/postgresql/data
     environment:

@@ -1,7 +1,13 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
+    format: json
+    defaults:
+        _format: json
 
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
+    format: json
+    defaults:
+        _format: json
