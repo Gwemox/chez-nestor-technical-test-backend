@@ -12,6 +12,9 @@ RUN docker-php-ext-install \
         pdo \
         pdo_pgsql \
     ;
+## Add the wait script to the image
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
+RUN chmod +x /wait
 #RUN symfony server:ca:install
 
 FROM php_api AS symfony_dev_php
@@ -43,8 +46,8 @@ COPY --from=symfony_build_dev /srv/app/var var
 COPY --from=symfony_build_dev /srv/app/bin bin
 RUN php bin/phpunit --check-version
 COPY . .
-#ENTRYPOINT php /srv/app/bin/console doctrine:database:drop --force && php /srv/app/bin/console doctrine:database:create && php /srv/app/bin/console doctrine:migration:migrate --no-interaction
-CMD php /srv/app/bin/console doctrine:migration:migrate --no-interaction && php bin/phpunit
+ENTRYPOINT /wait && php bin/console doctrine:database:drop --force && php bin/console doctrine:database:create && php bin/console doctrine:migration:migrate --no-interaction && php bin/phpunit
+#CMD php /srv/app/bin/console doctrine:migration:migrate --no-interaction && php bin/phpunit
 
 FROM php_api AS api
 MAINTAINER Thibault Buathier <thibault.buathier@gmail.com>
@@ -55,5 +58,5 @@ COPY --from=symfony_build /srv/app/vendor vendor
 COPY --from=symfony_build /srv/app/var var
 COPY --from=symfony_build /srv/app/bin bin
 EXPOSE 80
-CMD php bin/console doctrine:migration:migrate --no-interaction --allow-no-migration && chown www-data:www-data -R var && symfony server:start --port=80 --no-tls
+CMD /wait && php bin/console doctrine:migration:migrate --no-interaction --allow-no-migration && chown www-data:www-data -R var && symfony server:start --port=80 --no-tls
 
