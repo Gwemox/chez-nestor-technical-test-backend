@@ -2,25 +2,26 @@
 
 namespace App\Controller;
 
-use App\Entity\Apartment;
-use App\Form\ApartmentCreateEditType;
+use App\Entity\Room;
+use App\Form\RoomCreateEditType;
 use App\Service\CrudService\CrudServiceInterface;
 use App\Service\CrudService\Exception\BadTypeException;
 use App\Service\CrudService\Exception\FormNotValidException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class ApartmentController
- * @Route("/apartments", name="apartments_")
+ * Class RoomController
+ * @Route("/rooms", name="rooms_")
  * @package App\Controller
  */
-class ApartmentController extends AbstractController
+class RoomController extends AbstractController
 {
     /** @var CrudServiceInterface */
     private $crudService;
-    private const ENTITY = Apartment::class;
+    private const ENTITY = Room::class;
 
     public function __construct(CrudServiceInterface $crudService)
     {
@@ -33,22 +34,22 @@ class ApartmentController extends AbstractController
      */
     public function getAll(): JsonResponse
     {
-        return $this->json($this->crudService->getAll(self::ENTITY));
+        return $this->json($this->crudService->getAll(self::ENTITY), 200, [], [AbstractNormalizer::CIRCULAR_REFERENCE_LIMIT => 2]);
     }
 
     /**
-     * @Route("/{apartmentId}",
+     * @Route("/{roomId}",
      *     name="find_one",
      *     methods="GET",
-     *     requirements={"apartmentId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
+     *     requirements={"roomId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
      * )
-     * @param String $apartmentId
+     * @param String $roomId
      * @return JsonResponse
      * @throws BadTypeException
      */
-    public function getOneById(string $apartmentId)
+    public function getOneById(string $roomId)
     {
-        return $this->json($this->crudService->getOneById(self::ENTITY, $apartmentId));
+        return $this->json($this->crudService->getOneById(self::ENTITY, $roomId));
     }
 
     /**
@@ -59,45 +60,45 @@ class ApartmentController extends AbstractController
     public function post()
     {
         return $this->json(
-            $this->crudService->post(self::ENTITY,ApartmentCreateEditType::class),
+            $this->crudService->post(self::ENTITY,RoomCreateEditType::class),
             201
         );
     }
 
     /**
-     * @Route("/{apartmentId}",
+     * @Route("/{roomId}",
      *     name="edit",
      *     methods="PATCH",
-     *     requirements={"apartmentId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
+     *     requirements={"roomId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
      * )
-     * @param string $apartmentId
+     * @param string $roomId
      * @return JsonResponse
      * @throws BadTypeException
      * @throws FormNotValidException
      */
-    public function edit(string $apartmentId)
+    public function edit(string $roomId)
     {
         return $this->json(
-            $this->crudService->edit(self::ENTITY, ApartmentCreateEditType::class, $apartmentId),
+            $this->crudService->edit(self::ENTITY, RoomCreateEditType::class, $roomId),
             204
         );
     }
 
     /**
-     * @Route("/{apartmentId}",
+     * @Route("/{roomId}",
      *     name="delete",
      *     methods="DELETE",
-     *     requirements={"apartmentId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
+     *     requirements={"roomId"="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
      * )
-     * @param string $apartmentId
+     * @param string $roomId
      * @return JsonResponse
      * @throws BadTypeException
      * @throws FormNotValidException
      */
-    public function delete(string $apartmentId)
+    public function delete(string $roomId)
     {
         return $this->json(
-            $this->crudService->delete(self::ENTITY, $apartmentId)
+            $this->crudService->delete(self::ENTITY, $roomId)
         );
     }
 }

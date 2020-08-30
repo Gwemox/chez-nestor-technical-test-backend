@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ApartmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -42,6 +45,19 @@ class Apartment
      * @Assert\NotBlank()
      */
     private $city;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Room::class, mappedBy="apartment", orphanRemoval=true)
+     * @Assert\NotNull()
+     * @Assert\Count(min="1")
+     * @Ignore()
+     */
+    private $rooms;
+
+    public function __construct()
+    {
+        $this->rooms = new ArrayCollection();
+    }
 
     public function getId(): ?string
     {
@@ -92,6 +108,37 @@ class Apartment
     public function setCity(string $city): self
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Room[]
+     */
+    public function getRooms(): Collection
+    {
+        return $this->rooms;
+    }
+
+    public function addRoom(Room $room): self
+    {
+        if (!$this->rooms->contains($room)) {
+            $this->rooms[] = $room;
+            $room->setApartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoom(Room $room): self
+    {
+        if ($this->rooms->contains($room)) {
+            $this->rooms->removeElement($room);
+            // set the owning side to null (unless already changed)
+            if ($room->getApartment() === $this) {
+                $room->setApartment(null);
+            }
+        }
 
         return $this;
     }
